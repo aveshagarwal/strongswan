@@ -4,7 +4,6 @@ After=syslog.target network.target
 
 [Service]
 ExecStart=@SBINDIR@/@IPSEC_SCRIPT@ start --nofork
-StandardOutput=syslog
 
 [Install]
 WantedBy=multi-user.target

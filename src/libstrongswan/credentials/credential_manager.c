@@ -839,8 +839,9 @@ typedef struct {
 	linked_list_t *failed;
 } trusted_enumerator_t;
 
+//rhbz#1182689
 METHOD(enumerator_t, trusted_enumerate, bool,
-	trusted_enumerator_t *this, certificate_t **cert, auth_cfg_t **auth)
+	trusted_enumerator_t *this, certificate_t **cert)
 {
 	certificate_t *current;
 
@@ -871,10 +872,6 @@ METHOD(enumerator_t, trusted_enumerate, bool,
 					this->auth->add(this->auth, AUTH_RULE_SUBJECT_CERT,
 									this->pretrusted->get_ref(this->pretrusted));
 				}
-				if (auth)
-				{
-					*auth = this->auth;
-				}
 				return TRUE;
 			}
 		}
@@ -900,10 +897,6 @@ METHOD(enumerator_t, trusted_enumerate, bool,
 							   this->online))
 		{
 			*cert = current;
-			if (auth)
-			{
-				*auth = this->auth;
-			}
 			return TRUE;
 		}
 		this->failed->insert_last(this->failed, current->get_ref(current));

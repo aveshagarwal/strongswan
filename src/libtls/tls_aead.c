@@ -98,9 +98,11 @@ METHOD(tls_aead_t, decrypt, bool,
 	u_int8_t icvlen;
 	sigheader_t hdr;
 
+	DBG1(DBG_TLS, "decrypt tls_aead.c: 1");
 	iv.len = this->aead->get_iv_size(this->aead);
 	if (data->len < iv.len)
 	{
+		DBG1(DBG_TLS, "decrypt tls_aead.c: 2");
 		return FALSE;
 	}
 	iv.ptr = data->ptr;
@@ -108,6 +110,7 @@ METHOD(tls_aead_t, decrypt, bool,
 	icvlen = this->aead->get_icv_size(this->aead);
 	if (data->len < icvlen)
 	{
+		DBG1(DBG_TLS, "decrypt tls_aead.c: 3");
 		return FALSE;
 	}
 
@@ -119,6 +122,7 @@ METHOD(tls_aead_t, decrypt, bool,
 	assoc = chunk_from_thing(hdr);
 	if (!this->aead->decrypt(this->aead, *data, assoc, iv, NULL))
 	{
+		DBG1(DBG_TLS, "decrypt tls_aead.c: 4");
 		return FALSE;
 	}
 	data->len -= icvlen;

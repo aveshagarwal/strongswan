@@ -295,6 +295,8 @@ METHOD(tls_t, build, status_t,
 		/* query upper layers for new records, as many as we can get */
 		while (TRUE)
 		{
+			//rhbz 1179330
+			type = 0;
 			status = this->protection->build(this->protection, &type, &data);
 			switch (status)
 			{

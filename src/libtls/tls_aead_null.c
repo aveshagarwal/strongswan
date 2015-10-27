@@ -71,10 +71,11 @@ METHOD(tls_aead_t, decrypt, bool,
 {
 	chunk_t assoc, mac;
 	sigheader_t hdr;
-
+	DBG1(DBG_TLS, "decrypt tls_aead_null.c: 1");
 	mac.len = this->signer->get_block_size(this->signer);
 	if (data->len < mac.len)
 	{
+		DBG1(DBG_TLS, "decrypt tls_aead_null.c: 2");
 		return FALSE;
 	}
 	mac = chunk_skip(*data, data->len - mac.len);
@@ -89,6 +90,7 @@ METHOD(tls_aead_t, decrypt, bool,
 	if (!this->signer->get_signature(this->signer, assoc, NULL) ||
 		!this->signer->verify_signature(this->signer, *data, mac))
 	{
+		DBG1(DBG_TLS, "decrypt tls_aead_null.c: 3");
 		return FALSE;
 	}
 	return TRUE;

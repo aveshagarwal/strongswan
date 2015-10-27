@@ -567,8 +567,10 @@ plugin_t *openssl_plugin_create()
 
 #ifndef OPENSSL_NO_ENGINE
 	/* activate support for hardware accelerators */
-	ENGINE_load_builtin_engines();
-	ENGINE_register_all_complete();
+	if (!fips_mode)
+	{
+		ENGINE_register_all_complete();
+	}
 #endif /* OPENSSL_NO_ENGINE */
 
 	if (!seed_rng())

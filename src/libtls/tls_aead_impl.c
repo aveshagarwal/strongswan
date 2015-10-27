@@ -102,9 +102,12 @@ METHOD(tls_aead_t, decrypt, bool,
 	sigheader_t hdr;
 	size_t i;
 
+	DBG1(DBG_TLS, "decrypt tls_aead_impl.c: 1");
 	bs = this->crypter->get_block_size(this->crypter);
+	DBG1(DBG_TLS, "decrypt tls_aead_impl.c: 2");
 	if (data->len < bs || data->len < this->iv.len || data->len % bs)
 	{
+	DBG1(DBG_TLS, "decrypt tls_aead_impl.c: 3");
 		return FALSE;
 	}
 	iv = chunk_alloca(this->iv.len);
@@ -112,6 +115,7 @@ METHOD(tls_aead_t, decrypt, bool,
 	memcpy(this->iv.ptr, data->ptr + data->len - this->iv.len, this->iv.len);
 	if (!this->crypter->decrypt(this->crypter, *data, iv, NULL))
 	{
+		DBG1(DBG_TLS, "decrypt tls_aead_impl.c: 4");
 		return FALSE;
 	}
 	padlen = data->ptr[data->len - 1];
@@ -121,6 +125,7 @@ METHOD(tls_aead_t, decrypt, bool,
 		{
 			if (data->ptr[i] != padlen)
 			{
+				DBG1(DBG_TLS, "decrypt tls_aead_impl.c: 5");
 				return FALSE;
 			}
 		}
@@ -130,6 +135,7 @@ METHOD(tls_aead_t, decrypt, bool,
 	bs = this->signer->get_block_size(this->signer);
 	if (data->len < bs)
 	{
+		DBG1(DBG_TLS, "decrypt tls_aead_impl.c: 6");
 		return FALSE;
 	}
 	mac = chunk_skip(*data, data->len - bs);
@@ -144,6 +150,7 @@ METHOD(tls_aead_t, decrypt, bool,
 	if (!this->signer->get_signature(this->signer, assoc, NULL) ||
 		!this->signer->verify_signature(this->signer, *data, mac))
 	{
+		DBG1(DBG_TLS, "decrypt tls_aead_impl.c: 7");
 		return FALSE;
 	}
 	return TRUE;
